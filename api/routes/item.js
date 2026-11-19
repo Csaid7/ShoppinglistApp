@@ -3,15 +3,17 @@ const pool = require('../db');
 
 const router = express.Router();
 
-// GET /items: the household's needed items, newest first
+// GET /items: the household's needed items, plus anything bought in the last day
 router.get('/', async (req, res) => {
   try {
     const { rows } = await pool.query(
-      `SELECT items.id, items.name, items.quantity,
-              users.name AS "requestedBy", items.created_at AS "createdAt"
+      `SELECT items.id, items.name, items.quantity, items.status,
+              users.name AS "requestedBy", items.created_at AS "createdAt",
+              items.bought_at AS "boughtAt"
          FROM items
          LEFT JOIN users ON users.id = items.requested_by
-        WHERE items.household_id = $1 AND items.status = 'needed'
+        WHERE items.household_id = $1
+          AND (items.status = 'needed' OR items.bought_at > now() - interval '1 day')
         ORDER BY items.created_at DESC`,
       [req.user.householdId]
     );

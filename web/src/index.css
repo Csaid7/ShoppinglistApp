@@ -43,21 +43,19 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; }
-html, body { height: 100%; }
 body {
   font-family: 'Inter', system-ui, sans-serif;
   background: var(--bg-page);
   color: var(--fg);
-  display: flex;
-  justify-content: center;
 }
 
-/* ── App shell ── */
+/* ── App shell: same width and height on every tab; only .content scrolls ── */
 .app {
   width: 100%;
   max-width: 460px;
-  height: 100%;
-  min-height: 100dvh;
+  height: 100dvh;
+  margin: 0 auto;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   background: var(--bg-app);
@@ -105,6 +103,7 @@ body {
 /* ── Scrollable content ── */
 .content {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
@@ -192,17 +191,61 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 .check-btn.done { background: var(--bought); border-color: var(--bought); color: #fff; }
-.qty { font-size: 11px; font-weight: 600; color: var(--fg-muted); font-variant-numeric: tabular-nums; }
-
-/* ── Stub screen (History / Members / Account) ── */
-.stub {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 8px; padding: 60px 20px; text-align: center;
-  color: var(--fg-muted);
+.qty {
+  font-size: 11px; font-weight: 600; color: var(--fg-muted); font-variant-numeric: tabular-nums;
+  max-width: 110px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.stub-icon { font-size: 40px; }
-.stub-label { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; color: var(--fg); }
-.stub-hint { font-size: 13px; }
+
+/* ── Banner ── */
+.banner {
+  background: var(--accent-lt);
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12.5px; font-weight: 500; color: var(--accent);
+}
+.banner-dismiss {
+  margin-left: auto; font-size: 18px; font-weight: 300; line-height: 1;
+  color: var(--fg-muted); cursor: pointer; border: none; background: none; padding: 0;
+}
+
+/* ── History ── */
+.hist-day { background: var(--bg-card); border-radius: 16px; overflow: hidden; margin-bottom: 10px; }
+.hist-day-hd {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 14px 10px; border-bottom: 1px solid var(--sep);
+}
+.hist-day-date { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; font-weight: 700; color: var(--fg); }
+.hist-day-count { font-size: 11.5px; font-weight: 500; color: var(--fg-muted); }
+.hist-item { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--sep); }
+.hist-item:last-child { border-bottom: none; }
+.hist-emoji { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+.hist-name { font-size: 13.5px; font-weight: 500; color: var(--fg); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hist-who { font-size: 11.5px; color: var(--fg-muted); flex-shrink: 0; }
+
+/* ── Members ── */
+.member-card { background: var(--bg-card); border-radius: 16px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+.member-av { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700; color: #fff; flex-shrink: 0; }
+.member-body { flex: 1; min-width: 0; }
+.member-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--fg); }
+.member-role { font-size: 12px; color: var(--fg-muted); margin-top: 2px; }
+.member-badge { font-size: 11px; font-weight: 600; color: var(--accent); background: var(--accent-lt); padding: 3px 10px; border-radius: 100px; flex-shrink: 0; }
+.invite-card { background: var(--bg-card); border-radius: 16px; padding: 14px 16px; display: flex; align-items: center; gap: 14px; opacity: .7; }
+.invite-icon { width: 46px; height: 46px; border-radius: 50%; background: var(--sep); display: flex; align-items: center; justify-content: center; font-size: 20px; color: var(--fg-muted); flex-shrink: 0; }
+.invite-text { font-size: 14px; font-weight: 600; color: var(--fg-muted); }
+
+/* ── Account ── */
+.acct-hero { background: var(--accent); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 16px; margin-bottom: 2px; }
+.acct-av { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 18px; font-weight: 800; color: #fff; flex-shrink: 0; }
+.acct-name { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px; font-weight: 800; color: #fff; }
+.acct-email { font-size: 12px; color: rgba(255,255,255,.65); margin-top: 2px; }
+.settings-group { background: var(--bg-card); border-radius: 16px; overflow: hidden; margin-bottom: 8px; }
+.settings-row { display: flex; align-items: center; padding: 13px 16px; border-bottom: 1px solid var(--sep); gap: 12px; }
+.settings-row:last-child { border-bottom: none; }
+.settings-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-lt); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+.settings-label { font-size: 14px; font-weight: 500; color: var(--fg); flex: 1; }
+.settings-value { font-size: 13px; color: var(--fg-muted); }
+.settings-chev { font-size: 18px; color: var(--sep); }
 
 /* ── Error banner ── */
 .error-bar {
@@ -266,7 +309,6 @@ body {
 }
 .sheet-input:focus { border-color: var(--accent); }
 .sheet-input::placeholder { color: var(--fg-muted); }
-.sheet-qty { width: 90px; flex-shrink: 0; }
 .sheet-submit {
   background: var(--accent); color: #fff; border: none; border-radius: 14px;
   padding: 14px; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700;
