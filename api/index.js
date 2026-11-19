@@ -1,10 +1,11 @@
 const express = require('express');
-const { Pool } = require('pg');
+const pool = require('./db');
+const currentUser = require('./middleware/currentUser');
 
 const app = express();
 app.use(express.json());
-
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+app.use(currentUser);
+app.use('/items', require('./routes/item'));
 
 app.get('/health', async (req, res) => {
   try {
